@@ -22,7 +22,7 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
-  Card.findOneAndRemove(cardId)
+  Card.findByIdAndRemove(cardId)
     .then((card) => {
       if(!card) {
         res.status(DocumentNotFoundError).send({ message: "Карточка не найдена" })
