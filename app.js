@@ -26,6 +26,10 @@ app.use((req, res, next) => {
 
 app.use('/', require('./routes/users'))
 app.use('/', require('./routes/cards'))
+app.use((req, res) => {
+  res.status(404);
+  res.send("Wrong URL");
+})
 app.use(express.static(__dirname));
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`)

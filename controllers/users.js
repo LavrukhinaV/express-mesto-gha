@@ -20,7 +20,12 @@ module.exports.getUser = (req, res) => {
       }
       res.send(user)
     })
-    .catch(err => res.status(DefaultError).send({ message: `Ошибка сервера ${err}` }))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(ValidationError).send({ message: "Переданы некорректные данные" })
+      }
+      res.status(DefaultError).send({ message: `Ошибка сервера ${err}` })
+    })
 }
 
 module.exports.createUser = (req, res) => {
@@ -37,7 +42,7 @@ module.exports.createUser = (req, res) => {
 module.exports.updateUserInfo = (req, res) => {
   const { name, about } = req.body;
   const { userId } = req.params;
-  User.findOneAndUpdate(userId, { name, about })
+  User.findOneAndUpdate(userId, { name, about }, { new: true, runValidators: true })
   .then((data) => {
     if(!data) {
       res.status(DocumentNotFoundError).send({ message: "Запрашиваемый пользователь не найден" })
@@ -56,7 +61,7 @@ module.exports.updateUserInfo = (req, res) => {
 module.exports.updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
   const { userId } = req.params;
-  User.findOneAndUpdate(userId, { avatar })
+  User.findOneAndUpdate(userId, { avatar }, { new: true, runValidators: true })
   .then((data) => {
     if(!data) {
       res.status(DocumentNotFoundError).send({ message: "Запрашиваемый пользователь не найден" })
