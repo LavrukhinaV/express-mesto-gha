@@ -28,7 +28,7 @@ app.use('/', require('./routes/users'))
 app.use('/', require('./routes/cards'))
 app.use((req, res) => {
   res.status(404);
-  res.send("Wrong URL");
+  res.send({ message: "Неправильный адрес" });
 })
 app.use(express.static(__dirname));
 app.listen(PORT, () => {

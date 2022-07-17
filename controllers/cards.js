@@ -11,7 +11,7 @@ module.exports.getCards = (req, res) => {
 }
 module.exports.createCard = (req, res) => {
   Card.create({ ... req.body })
-    .then(card => res.status(201).send({ card }))
+    .then(card => res.status(201).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(ValidationError).send({ message: "Переданы некорректные данные" })
@@ -28,9 +28,14 @@ module.exports.deleteCard = (req, res) => {
         res.status(DocumentNotFoundError).send({ message: "Карточка не найдена" })
         return
       }
-      res.status(200).send({ card })
+      res.status(200).send(card)
     })
-    .catch(err => res.status(DefaultError).send({ message: `Ошибка сервера ${err}` }))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(ValidationError).send({ message: "Переданы некорректные данные" })
+      }
+      res.status(DefaultError).send({ message: `Ошибка сервера ${err}` })
+    })
 };
 
 module.exports.likeCard = (req, res) => {
