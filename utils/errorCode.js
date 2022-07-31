@@ -1,9 +1,15 @@
-const ValidationError = 400;
-const DocumentNotFoundError = 404;
-const DefaultError = 500;
+const ValidationErrorCode = 400;
+const UnauthorizedErrorCode = 401;
+const ForbiddenErrorCode = 403;
+const NotFoundErrorCode = 404;
+const ConflictErrorCode = 409;
+const DefaultErrorCode = 500;
 
 module.exports = {
-  ValidationError,
-  DocumentNotFoundError,
-  DefaultError,
+  ValidationErrorCode,
+  UnauthorizedErrorCode,
+  ForbiddenErrorCode,
+  NotFoundErrorCode,
+  ConflictErrorCode,
+  DefaultErrorCode,
 };
