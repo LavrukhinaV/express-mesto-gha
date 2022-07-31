@@ -2,7 +2,7 @@ const { PORT = 3000 } = process.env;
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi, errors } = require('celebrate');
 const { DocumentNotFoundError } = require('./utils/errorCode');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
@@ -25,6 +25,7 @@ app.post('/signin', celebrate({
     password: Joi.string().required(),
   }),
 }), login);
+
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -44,6 +45,8 @@ app.use((req, res) => {
   res.status(DocumentNotFoundError);
   res.send({ message: 'Неправильный адрес' });
 });
+
+app.use(errors());
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

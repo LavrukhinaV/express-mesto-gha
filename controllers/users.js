@@ -115,7 +115,10 @@ module.exports.login = (req, res) => {
         return res.send({ token });
       });
     })
-    .catch(() => res.status(DefaultError).send({ message: 'Ошибка сервера' }));
+    // .catch(() => res.status(DefaultError).send({ message: 'Ошибка сервера' }));
+    .cstch((err) => {
+      next(err);
+    });
 };
 
 module.exports.getInfo = (req, res) => {
