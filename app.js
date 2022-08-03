@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
-const { DocumentNotFoundError } = require('./utils/errorCode');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
@@ -40,11 +39,6 @@ app.use(auth);
 
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
-
-app.use((req, res) => {
-  res.status(DocumentNotFoundError);
-  res.send({ message: 'Неправильный адрес' });
-});
 
 app.use(errors());
 

@@ -22,11 +22,10 @@ module.exports.getUser = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      let prettyErr = err;
       if (err.name === 'CastError') {
-        prettyErr = new ValidationError('Переданы некорректные данные');
+        next(new ValidationError('Переданы некорректные данные'));
       }
-      next(prettyErr);
+      next(err);
     });
 };
 
@@ -46,13 +45,12 @@ module.exports.createUser = (req, res, next) => {
       email: user.email,
     }))
     .catch((err) => {
-      let prettyErr = err;
       if (err.name === 'ValidationError') {
-        prettyErr = new ValidationError('Переданы некорректные данные');
+        next(new ValidationError('Переданы некорректные данные'));
       } else if (err.code === 11000) {
-        prettyErr = new ConflictError('Пользователь с таким email уже зарегистрирован');
+        next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
       }
-      next(prettyErr);
+      next(err);
     });
 };
 
@@ -67,11 +65,10 @@ module.exports.updateUserInfo = (req, res, next) => {
       res.send(data);
     })
     .catch((err) => {
-      let prettyErr = err;
       if (err.name === 'ValidationError') {
-        prettyErr = new ValidationError('Переданы некорректные данные');
+        next(new ValidationError('Переданы некорректные данные'));
       }
-      next(prettyErr);
+      next(err);
     });
 };
 
@@ -86,11 +83,10 @@ module.exports.updateUserAvatar = (req, res, next) => {
       res.send(data);
     })
     .catch((err) => {
-      let prettyErr = err;
       if (err.name === 'ValidationError') {
-        prettyErr = new ValidationError('Переданы некорректные данные');
+        next(new ValidationError('Переданы некорректные данные'));
       }
-      next(prettyErr);
+      next(err);
     });
 };
 
@@ -101,7 +97,6 @@ module.exports.login = (req, res, next) => {
       const token = getJwtToken(user.id);
       res.send({ token });
     })
-
     .catch((err) => {
       next(err);
     });
@@ -116,10 +111,9 @@ module.exports.getInfo = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      let prettyErr = err;
       if (err.name === 'ValidationError') {
-        prettyErr = new ValidationError('Переданы некорректные данные');
+        next(new ValidationError('Переданы некорректные данные'));
       }
-      next(prettyErr);
+      next(err);
     });
 };
