@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const NotFoundError = require('./errors/not-found-err');
 
 const app = express();
 
@@ -39,6 +40,10 @@ app.use(auth);
 
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
+
+app.use((req, res, next) => {
+  next(new NotFoundError('Неправильный адрес'));
+});
 
 app.use(errors());
 
