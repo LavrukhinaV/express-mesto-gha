@@ -23,10 +23,11 @@ module.exports.getUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new ValidationError('Переданы некорректные данные'));
+        throw new ValidationError('Переданы некорректные данные');
       }
       next(err);
-    });
+    })
+    .catch(next);
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -49,9 +50,11 @@ module.exports.createUser = (req, res, next) => {
         next(new ValidationError('Переданы некорректные данные'));
       } else if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
+      } else {
+        next(err);
       }
-      next(err);
-    });
+    })
+    .catch(next);
 };
 
 module.exports.updateUserInfo = (req, res, next) => {
@@ -66,10 +69,11 @@ module.exports.updateUserInfo = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('Переданы некорректные данные'));
+        throw new ValidationError('Переданы некорректные данные');
       }
       next(err);
-    });
+    })
+    .catch(next);
 };
 
 module.exports.updateUserAvatar = (req, res, next) => {
@@ -84,10 +88,11 @@ module.exports.updateUserAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('Переданы некорректные данные'));
+        throw new ValidationError('Переданы некорректные данные');
       }
       next(err);
-    });
+    })
+    .catch(next);
 };
 
 module.exports.login = (req, res, next) => {
@@ -97,9 +102,7 @@ module.exports.login = (req, res, next) => {
       const token = getJwtToken(user.id);
       res.send({ token });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 module.exports.getInfo = (req, res, next) => {
@@ -111,9 +114,10 @@ module.exports.getInfo = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new ValidationError('Переданы некорректные данные'));
+      if (err.name === 'CastError') {
+        throw new ValidationError('Переданы некорректные данные');
       }
       next(err);
-    });
+    })
+    .catch(next);
 };
